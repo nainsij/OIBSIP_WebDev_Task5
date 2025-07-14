@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Basic Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .calculator {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      width: 320px;
+    }
+
+    .display {
+      background: #222;
+      color: #0f0;
+      font-size: 2rem;
+      padding: 15px;
+      text-align: right;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #eee;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+
+    .operator {
+      background-color: #ff9800;
+      color: #fff;
+    }
+
+    .equal {
+      background-color: #2196f3;
+      color: #fff;
+      grid-column: span 2;
+    }
+
+    .clear {
+      background-color: #f44336;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="deleteLast()">DEL</button>
+      <button class="operator" onclick="appendOperator('/')">÷</button>
+      <button class="operator" onclick="appendOperator('*')">×</button>
+
+      <button onclick="appendNumber('7')">7</button>
+      <button onclick="appendNumber('8')">8</button>
+      <button onclick="appendNumber('9')">9</button>
+      <button class="operator" onclick="appendOperator('-')">−</button>
+
+      <button onclick="appendNumber('4')">4</button>
+      <button onclick="appendNumber('5')">5</button>
+      <button onclick="appendNumber('6')">6</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+
+      <button onclick="appendNumber('1')">1</button>
+      <button onclick="appendNumber('2')">2</button>
+      <button onclick="appendNumber('3')">3</button>
+      <button onclick="appendNumber('.')">.</button>
+
+      <button onclick="appendNumber('0')">0</button>
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById('display');
+    let expression = '';
+
+    function appendNumber(num) {
+      if (display.innerText === '0') {
+        expression = num;
+      } else {
+        expression += num;
+      }
+      updateDisplay();
+    }
+
+    function appendOperator(op) {
+      if (expression === '') return;
+      const lastChar = expression[expression.length - 1];
+      if ('+-*/'.includes(lastChar)) {
+        expression = expression.slice(0, -1) + op;
+      } else {
+        expression += op;
+      }
+      updateDisplay();
+    }
+
+    function clearDisplay() {
+      expression = '';
+      updateDisplay();
+    }
+
+    function deleteLast() {
+      expression = expression.slice(0, -1);
+      updateDisplay();
+    }
+
+    function calculate() {
+      try {
+        const result = eval(expression);
+        expression = result.toString();
+        updateDisplay();
+      } catch (e) {
+        display.innerText = 'Error';
+      }
+    }
+
+    function updateDisplay() {
+      display.innerText = expression || '0';
+    }
+  </script>
+</body>
+</html>
